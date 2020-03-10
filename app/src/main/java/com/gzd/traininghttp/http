@@ -1,0 +1,63 @@
+http:超文本传输协议
+也就是针对超文本的，对超文本的通讯制定相关的交流规则
+
+网页通过浏览器的渲染引擎展示成可视化图形、文案
+
+URL->HTTP报文
+-------------------------------
+请求报文：
+请求的动作 动作的目标 动作遵循的协议版本             //retrofit的设计
+method     /users     HTTP/1.1（2会进行数据压缩）  //请求行
+请求的地址、落款/Headers
+Host: xxx.xxx.com:80 //HOST的意义不是指定域名地址，而应该是子主机，虚拟主机，给主主机看的信息
+Content-Type: text/plain
+Content-Length: 243 //BODY的字节长度，区别结束符，用长度结束，不用结束符
+
+Body ...          //url中?后的内容
+-------------------------------
+响应报文：
+动作协议版本  响应码（简化结果判断） 响应信息简述
+HTTP/1.1      200                    OK
+... //类似上面的
+
+POST和PUT的区别：
+PUT有幂等机制，也就是多次修改结果相同；POST不是，比如新增带来的改动
+请求方法里还有一个叫HEAD，和GET很相似，只是它不返回body，它的使用场景时其他操作的预判断，比如下载前
+判断一下length，或者试试网络是否通，一种优化方案
+
+301：永久迁移 302：暂时迁移 304：内容未改变，读缓存  Location：重定向目标地址
+
+1开头：临时性消息
+101：服务器确认2版本可以响应（请求头部添加了Upgrade:h2c）
+100：服务器会继续等待客户端数据发送（请求头部Expect：100-continue）
+
+metadata meta-game
+Header里的数据叫metadata，数据的属性，比如utf-8
+
+DNS查询：通过域名查询ip地址
+
+Content-Type:  //告诉对方数据类型，对方才好用不同的形式解析数据
+1.普通表单（纯文字表单）：application/x-www-form-urlencoded //以url的形式拼接数据，放在body里，Query放在path里
+2.特殊表单（文本、图片、视频）：multipart/form-data（2进制数据） boundary划分文件名和文件
+3.text/html
+4.application/json
+5.image/jpeg   application/zip:单文件传输，一般不带文本了，简洁化
+
+Transfer-Encoding：chunked //分块传输，Body长度无法确定，Content-Length不能使用，在body里分区域给长度
+
+User-Agent：真正发起请求的代理工具，比如浏览器，手机客户端
+
+Range
+Accept-Range  //分段加载，比如断点下载，多线程线程（迅雷），图片加载一半
+
+Cookie/Set-Cookie
+Authorization
+
+Cache 暂放，后续会用  Buffer，下游消耗不动、不消化，上游先屯（比如麦当劳汉堡）
+Cache-Control：no-cache（询问是否失效）、no-store（不缓存）、max-age（失效日期）
+               private/public（中间节点是否缓存）（邻居访问问题）
+Last-Modified （最近修改日期是否满足我的需求）
+Etag 资源指纹（快照）
+
+REST：
+RESTful HTTP 正确使用HTTP
