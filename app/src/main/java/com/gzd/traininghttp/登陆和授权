@@ -17,3 +17,14 @@ Authorization（Token）：
 1.Basic<....数据>(做Base64操作) 截获可破解；需要用Cookie存到本地，有被非法拿到的风险
 2.Bearer（持票人）：
 OAuth2
+一、第三方登陆
+第三方登陆->第三方授权；只是拿大平台的账号信息用来现场注册，没有密码
+client_id指的是集成第三方的平台，在集成第三方时会获得，同时会伴随一个secret
+第三方登陆的过程：客户端请求第三方登陆，用户同意后返回一个授权code，客户端拿这个code返回给服务器，
+服务器拿secret、code去第三方获取token，然后服务器再拿access token去获取用户信息
+这个过程，服务器需要验证改账号是否存在，使用code，第三方需要验证调取信息者是否注册过，使用client_id和
+secret，用token告诉服务器是否存在这个账户；最后服务器有token了就去拿数据
+
+二、自家服务器登陆，不是OAuth2
+
+refresh_token 会使 access_token失效，获得新的access_token
